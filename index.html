@@ -1,0 +1,39 @@
+<html>
+	<head>
+		<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+		<script type="text/javascript">
+
+			var socket = io.connect();
+
+      //gives feedback when connection is established
+			socket.on('connect', function() {
+				console.log("Connected");
+			});
+      //prints in terminal
+      //command line is only way to see into server
+
+			// Receive from any event - this is received from the server's
+      //broadcast.emit
+			socket.on('chatmessage', function (data) {
+				console.log(data);
+				document.getElementById('messages').innerHTML = "" + data +
+ + "" + document.getElementById('messages').innerHTML;
+			});
+
+			var sendmessage = function(message) {
+        //printing to browser console the event that's happening
+				console.log("chatmessage: " + message);
+        //emit this event to the server
+				socket.emit('chatmessage', message);
+			};
+
+		</script>
+	</head>
+ <body>
+ <div id="messages">
+ No Messages Yet
+ </div>
+ <input type="text" id="message" name="message">
+ <input type="submit" value="submit" onclick="sendmessage(document.getElementById('message').value);">
+ </body>
+</html>
